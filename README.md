@@ -66,8 +66,6 @@ The installer creates an ad-hoc-signed `~/Applications/Quotakin.app`. It does no
 
 Provider interfaces can change or become unavailable. Quotakin labels stale and last-known values and does not invent quota when a provider returns no usable window. Cost figures are estimates based on the bundled catalog effective `2026-06-01`; provider pricing and billing adjustments can differ.
 
-## License and Attribution
+## License
 
 Quotakin is available under the [MIT License](LICENSE).
-
-Usage accounting and parts of the Usage screen were adapted from [T3 Code](https://github.com/pingdotgg/t3code). Provider icons are from [Lobe Icons](https://github.com/lobehub/lobe-icons). Both are used under the MIT License; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
