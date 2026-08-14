@@ -24,3 +24,31 @@ jobs:
 
       - name: Run test suite
         run: ./scripts/test.sh
+
+  package:
+    name: Distribution packaging
+    runs-on: macos-26
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825a76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build universal app with validation signature
+        run: |
+          ./scripts/build-release-app.sh \
+            --version 0.0.0 \
+            --build-number "$GITHUB_RUN_NUMBER" \
+            --output "$RUNNER_TEMP/Quotakin.app" \
+            --identity -
+
+      - name: Create and verify ZIP and DMG
+        run: |
+          ./scripts/create-release-assets.sh \
+            --app "$RUNNER_TEMP/Quotakin.app" \
+            --version 0.0.0 \
+            --output-dir "$RUNNER_TEMP/release"
+          unzip -t "$RUNNER_TEMP/release/Quotakin-0.0.0.zip"
+          hdiutil verify "$RUNNER_TEMP/release/Quotakin-0.0.0.dmg"
