@@ -30,6 +30,17 @@ Quotakin stores only summary metadata: provider, model, observation time, token 
 
 ## Build
 
+Install with Homebrew (builds locally from the audited source release):
+
+```sh
+brew install richarddemann/tap/quotakin
+quotakin
+```
+
+Upgrade later with `brew upgrade richarddemann/tap/quotakin`.
+
+### Build from a checkout
+
 Run the full test suite:
 
 ```sh
