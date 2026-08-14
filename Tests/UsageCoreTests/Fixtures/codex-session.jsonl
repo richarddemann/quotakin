@@ -1,0 +1,4 @@
+{"timestamp":"2026-06-01T09:59:00Z","type":"session_meta","payload":{"id":"synthetic-session"}}
+{"timestamp":"2026-06-01T09:59:30Z","type":"turn_context","payload":{"model":"gpt-5.2-codex"}}
+{"timestamp":"2026-06-01T10:00:00Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":999,"cached_input_tokens":444,"output_tokens":88,"reasoning_output_tokens":22,"total_tokens":1087},"last_token_usage":{"input_tokens":120,"cached_input_tokens":40,"output_tokens":12,"reasoning_output_tokens":3,"total_tokens":135}},"rate_limits":{"primary":{"used_percent":35,"window_minutes":300,"resets_at":1780300000},"secondary":{"used_percent":54,"window_minutes":10080,"resets_at":1780800000}},"plan_type":"plus"}}
+{"timestamp":"2026-06-01T10:01:00Z","type":"event_msg","payload":{"type":"turn_started"}}

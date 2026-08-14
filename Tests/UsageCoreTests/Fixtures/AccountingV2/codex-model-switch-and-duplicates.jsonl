@@ -1,0 +1,6 @@
+{"timestamp":"2026-08-01T10:00:00Z","type":"session_meta","payload":{"id":"codex-session","timestamp":"2026-08-01T10:00:00Z"}}
+{"timestamp":"2026-08-01T10:00:01Z","type":"turn_context","payload":{"model":"gpt-5.6-sol"}}
+{"timestamp":"2026-08-01T10:00:02Z","type":"event_msg","payload":{"type":"token_count","info":{"last_token_usage":{"input_tokens":100,"cached_input_tokens":40,"cache_write_input_tokens":10,"output_tokens":12,"reasoning_output_tokens":3,"total_tokens":112}}}}
+{"timestamp":"2026-08-01T10:00:03Z","type":"event_msg","payload":{"type":"token_count","info":{"last_token_usage":{"input_tokens":100,"cached_input_tokens":40,"cache_write_input_tokens":10,"output_tokens":12,"reasoning_output_tokens":3,"total_tokens":112}}}}
+{"timestamp":"2026-08-01T10:01:00Z","type":"turn_context","payload":{"model":"gpt-5.6-terra"}}
+{"timestamp":"2026-08-01T10:01:01Z","type":"event_msg","payload":{"type":"token_count","info":{"last_token_usage":{"input_tokens":24,"cached_input_tokens":4,"output_tokens":8,"reasoning_output_tokens":2,"total_tokens":32}}}}

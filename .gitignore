@@ -1,0 +1,13 @@
+.DS_Store
+.build/
+.swiftpm/
+.worktrees/
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+
+# Local agent, review, and worktree artifacts
+.claude/
+.codex-reports/
