@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="docs/assets/quotakin-icon.png" width="128" alt="Quotakin app icon">
   <h1>Quotakin</h1>
   <p>Keep an eye on your Claude and Codex quota—with a little companion in the menu bar.</p>
 </div>
