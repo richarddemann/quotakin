@@ -1046,3 +1046,28 @@ func dailyActivityGridSingleDayIncludesBothProvidersAndMinMax() async throws {
     #expect(grid.minTotalTokens == 471)
     #expect(grid.maxTotalTokens == 471)
 }
+
+@Test
+func dailyActivityGridPreservesUnpricedCoverage() async throws {
+    let store = try UsageStore.inMemory()
+    let calendar = Calendar(identifier: .gregorian)
+    let day = date(2026, 6, 1)
+    try await store.save(tokens: [
+        TokenSample(
+            provider: .codex,
+            observedAt: day.addingTimeInterval(60),
+            model: "unknown-model",
+            inputTokens: 10,
+            outputTokens: 0,
+            totalTokens: 10
+        )
+    ], quota: [])
+
+    let grid = try await store.dailyActivityGrid(from: day, through: day, calendar: calendar)
+    let codex = try #require(grid.days.first?.providerTotals.first { $0.provider == .codex })
+
+    #expect(codex.totalTokens == 10)
+    #expect(codex.estimatedCost == 0)
+    #expect(codex.unknownPricingSampleCount == 1)
+    #expect(grid.days.first?.unknownPricingSampleCount == 1)
+}

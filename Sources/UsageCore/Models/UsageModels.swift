@@ -184,11 +184,18 @@ public struct DailyProviderTokenTotal: Codable, Equatable, Sendable {
     public let provider: Provider
     public let totalTokens: Int
     public let estimatedCost: Decimal
+    public let unknownPricingSampleCount: Int
 
-    public init(provider: Provider, totalTokens: Int, estimatedCost: Decimal = 0) {
+    public init(
+        provider: Provider,
+        totalTokens: Int,
+        estimatedCost: Decimal = 0,
+        unknownPricingSampleCount: Int = 0
+    ) {
         self.provider = provider
         self.totalTokens = totalTokens
         self.estimatedCost = estimatedCost
+        self.unknownPricingSampleCount = unknownPricingSampleCount
     }
 }
 
@@ -207,6 +214,10 @@ public struct DailyActivityGridDay: Codable, Equatable, Sendable {
 
     public var estimatedCost: Decimal {
         providerTotals.reduce(0) { $0 + $1.estimatedCost }
+    }
+
+    public var unknownPricingSampleCount: Int {
+        providerTotals.reduce(0) { $0 + $1.unknownPricingSampleCount }
     }
 }
 

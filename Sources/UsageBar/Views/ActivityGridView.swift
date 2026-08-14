@@ -376,11 +376,14 @@ private struct DayDetailTooltip: View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(Self.dayFormatter.string(from: day.dayStart))
                 .font(.headline)
-            if displayedValue(for: day) == 0 {
+            if metric == .cost, day.totalTokens > 0, day.unknownPricingSampleCount > 0, day.estimatedCost == 0 {
+                Text("Cost unavailable")
+                    .foregroundStyle(.secondary)
+            } else if displayedValue(for: day) == 0 {
                 Text("No activity")
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(day.providerTotals.filter { displayedValue(for: $0) > 0 }, id: \.provider) { entry in
+                ForEach(day.providerTotals.filter { providerEntryIsVisible($0) }, id: \.provider) { entry in
                     HStack(spacing: Space.xs) {
                         ProviderIconView(provider: entry.provider, size: 14)
                         Text(entry.provider.displayName)
@@ -415,8 +418,16 @@ private struct DayDetailTooltip: View {
         metric == .cost ? day.estimatedCost : Decimal(day.totalTokens)
     }
 
+    private func providerEntryIsVisible(_ entry: DailyProviderTokenTotal) -> Bool {
+        displayedValue(for: entry) > 0
+            || (metric == .cost && entry.totalTokens > 0 && entry.unknownPricingSampleCount > 0)
+    }
+
     private func formattedValue(for entry: DailyProviderTokenTotal) -> String {
-        metric == .cost ? entry.estimatedCost.usdString : entry.totalTokens.compactTokenString
+        if metric == .cost, entry.estimatedCost == 0, entry.unknownPricingSampleCount > 0 {
+            return "—"
+        }
+        return metric == .cost ? entry.estimatedCost.usdString : entry.totalTokens.compactTokenString
     }
 
     private func formattedValue(for day: DailyActivityGridDay) -> String {

@@ -212,7 +212,7 @@ func liteLLMCatalogParsesRatesAndNormalizesNames() throws {
     let catalog = try PricingCatalog.liteLLM(data: data, effectiveDate: "2026-08-12")
 
     #expect(catalog.provenance == .remoteLiteLLM)
-    #expect(catalog.status == .current)
+    #expect(catalog.status == .fresh)
     #expect(
         try catalog.pricing(for: " models/OPENAI/gpt-test ")
             == ModelPricing(input: 2, cacheWrite: 2.5, cachedInput: 0.2, output: 8)
@@ -224,6 +224,36 @@ func liteLLMCatalogParsesRatesAndNormalizesNames() throws {
         try catalog.pricing(for: "claude-test")
             == ModelPricing(input: 3, cacheWrite: 3, cachedInput: 3, output: 15)
     )
+}
+
+@Test
+func liteLLMCatalogRejectsNegativeRates() throws {
+    let data = Data("""
+    {
+      "negative-input": {
+        "input_cost_per_token": -0.000001,
+        "output_cost_per_token": 0.000008
+      },
+      "negative-cache": {
+        "input_cost_per_token": 0.000002,
+        "output_cost_per_token": 0.000008,
+        "cache_read_input_token_cost": -0.000001
+      },
+      "valid-model": {
+        "input_cost_per_token": 0.000002,
+        "output_cost_per_token": 0.000008
+      }
+    }
+    """.utf8)
+    let catalog = try PricingCatalog.liteLLM(data: data, effectiveDate: "2026-08-15")
+
+    #expect(throws: PricingCatalogError.unknownModel("negative-input")) {
+        try catalog.pricing(for: "negative-input")
+    }
+    #expect(throws: PricingCatalogError.unknownModel("negative-cache")) {
+        try catalog.pricing(for: "negative-cache")
+    }
+    #expect(try catalog.pricing(for: "valid-model").input == 2)
 }
 
 @Test

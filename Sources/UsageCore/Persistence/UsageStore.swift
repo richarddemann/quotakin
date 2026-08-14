@@ -578,14 +578,11 @@ public actor UsageStore {
             var unknownPricingSampleCount = bucket.unknownPricingSampleCount
             let estimate = pricingCatalog.costEstimate(for: sample)
             if let amount = estimate.amountUSD {
-                if estimatedCostProvenance == .unpriced || estimatedCostProvenance == estimate.provenance {
-                    estimatedCost += amount
+                estimatedCost += amount
+                if estimatedCostProvenance == .unpriced {
                     estimatedCostProvenance = estimate.provenance
-                } else {
-                    // Provider-reported and catalogue-priced values are not
-                    // additive. Keep one labelled subtotal and report the
-                    // excluded sample through the existing coverage count.
-                    unknownPricingSampleCount += 1
+                } else if estimatedCostProvenance != estimate.provenance {
+                    estimatedCostProvenance = .mixed
                 }
             } else {
                 unknownPricingSampleCount += 1
@@ -639,11 +636,14 @@ public actor UsageStore {
 
         var totalsByDay: [Date: [Provider: Int]] = [:]
         var costsByDay: [Date: [Provider: Decimal]] = [:]
+        var unknownPricingByDay: [Date: [Provider: Int]] = [:]
         for sample in try tokenSamples(from: startDay, to: exclusiveEnd) {
             let dayStart = calendar.startOfDay(for: sample.observedAt)
             totalsByDay[dayStart, default: [:]][sample.provider, default: 0] += sample.totalTokens
             if let amount = pricingCatalog.costEstimate(for: sample).amountUSD {
                 costsByDay[dayStart, default: [:]][sample.provider, default: 0] += amount
+            } else {
+                unknownPricingByDay[dayStart, default: [:]][sample.provider, default: 0] += 1
             }
         }
 
@@ -654,7 +654,8 @@ public actor UsageStore {
                 DailyProviderTokenTotal(
                     provider: provider,
                     totalTokens: totalsByDay[cursor]?[provider] ?? 0,
-                    estimatedCost: costsByDay[cursor]?[provider] ?? 0
+                    estimatedCost: costsByDay[cursor]?[provider] ?? 0,
+                    unknownPricingSampleCount: unknownPricingByDay[cursor]?[provider] ?? 0
                 )
             }
             days.append(DailyActivityGridDay(dayStart: cursor, providerTotals: providerTotals))

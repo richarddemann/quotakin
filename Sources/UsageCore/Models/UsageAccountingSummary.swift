@@ -1,10 +1,11 @@
 import Foundation
 
 public enum UsageCostProvenance: Codable, Equatable, Sendable {
-    public enum Kind: String, Codable, Sendable { case providerReported, modelPriced, unpriced }
+    public enum Kind: String, Codable, Sendable { case providerReported, modelPriced, mixed, unpriced }
 
     case providerReported
     case modelPriced(catalogID: String, effectiveDate: String)
+    case mixed
     case unpriced
 
     public init(kind: Kind, source: String, effectiveDate: String? = nil) {
@@ -13,6 +14,8 @@ public enum UsageCostProvenance: Codable, Equatable, Sendable {
             self = .providerReported
         case .modelPriced:
             self = .modelPriced(catalogID: source, effectiveDate: effectiveDate ?? "unknown")
+        case .mixed:
+            self = .mixed
         case .unpriced:
             self = .unpriced
         }
@@ -22,6 +25,7 @@ public enum UsageCostProvenance: Codable, Equatable, Sendable {
         switch self {
         case .providerReported: .providerReported
         case .modelPriced: .modelPriced
+        case .mixed: .mixed
         case .unpriced: .unpriced
         }
     }

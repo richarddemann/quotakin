@@ -87,7 +87,7 @@ final class AppModel: ObservableObject {
     private let notificationPoster: any QuotaNotificationPosting
     private let providerSignInRunner: any ProviderSignInRunning
     private let credentialAccessAuthorizer: any ProviderCredentialAccessAuthorizing
-    private let pricingCatalogLoader: (any PricingCatalogLoading)?
+    let pricingCatalogLoader: (any PricingCatalogLoading)?
     private var providerSignInTasks: [Provider: Task<Void, Never>] = [:]
     private var notificationPolicyState = QuotaNotificationPolicyState()
     private var lastNotificationSnapshots: [QuotaSnapshot] = []
@@ -140,10 +140,13 @@ final class AppModel: ObservableObject {
         )
     }
 
-    static func live() -> AppModel {
-        // Public v0.1 uses the reviewed bundled catalogue. A mutable remote
-        // pricing feed must not silently change locally displayed estimates.
-        AppModel()
+    static func live(
+        notificationPoster: any QuotaNotificationPosting = UserNotificationsQuotaPoster()
+    ) -> AppModel {
+        AppModel(
+            notificationPoster: notificationPoster,
+            pricingCatalogLoader: LivePricingCatalogLoader()
+        )
     }
 
     /// Consumes the one automatic presentation for this process. Completion
@@ -548,6 +551,7 @@ final class AppModel: ObservableObject {
         isRefreshing = true
         statusMessage = "Refreshing usage..."
         await operation()
+        await reloadPricingCatalog()
         lastRefreshAt = Date()
         await decideAndPostNotifications()
         await reloadProviderSummaries()
@@ -667,11 +671,18 @@ final class AppModel: ObservableObject {
     }
 
     private func backgroundRefreshCompleted() async {
+        await reloadPricingCatalog()
         lastRefreshAt = Date()
         await decideAndPostNotifications()
         await reloadProviderSummaries()
+        await reloadDashboard()
         await reloadPredictions()
         statusMessage = "Last refreshed \(Self.shortTimeFormatter.string(from: lastRefreshAt ?? Date()))."
+    }
+
+    private func reloadPricingCatalog() async {
+        guard let pricingCatalogLoader else { return }
+        pricingCatalog = await pricingCatalogLoader.load()
     }
 
     /// Predictions read only the 90-minute history lookback — cheap enough

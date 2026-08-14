@@ -61,8 +61,9 @@ public enum PricingCatalogProvenance: String, Codable, Equatable, Sendable {
 }
 
 public enum PricingCatalogStatus: String, Codable, Equatable, Sendable {
+    case fresh
+    case cached
     case fallback
-    case current
 }
 
 public enum PricingCatalogError: Error, Equatable, Sendable {
@@ -75,6 +76,8 @@ public struct PricingCatalog: Sendable {
     public let limitations: [String]
     public let provenance: PricingCatalogProvenance
     public let status: PricingCatalogStatus
+    public let source: String?
+    public let fetchedAt: Date?
 
     private let pricingByModel: [String: ModelPricing]
     private let modelAliases: [String: String]
@@ -85,7 +88,9 @@ public struct PricingCatalog: Sendable {
         modelAliases: [String: String] = [:],
         limitations: [String] = [],
         provenance: PricingCatalogProvenance = .bundledAudited,
-        status: PricingCatalogStatus = .fallback
+        status: PricingCatalogStatus = .fallback,
+        source: String? = nil,
+        fetchedAt: Date? = nil
     ) {
         self.effectiveDate = effectiveDate
         self.pricingByModel = pricingByModel.reduce(into: [:]) { result, entry in
@@ -97,6 +102,8 @@ public struct PricingCatalog: Sendable {
         self.limitations = limitations
         self.provenance = provenance
         self.status = status
+        self.source = source
+        self.fetchedAt = fetchedAt
     }
 
     /// Stable, deliberately conservative normalization for transcript identifiers and

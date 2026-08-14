@@ -197,14 +197,22 @@ struct HistoryView: View {
                 .usageSegmentedControl()
             }
 
-            if chartSeries.allSatisfy({ $0.points.allSatisfy { $0.value == 0 } }) {
+            switch chartAvailability {
+            case .noUsage:
                 ContentUnavailableView(
                     "No usage in this range",
                     systemImage: "chart.bar.xaxis",
                     description: Text("Usage appears here after transcript indexing completes.")
                 )
                 .frame(height: 196)
-            } else {
+            case .costUnavailable:
+                ContentUnavailableView(
+                    "Cost unavailable",
+                    systemImage: "dollarsign.circle",
+                    description: Text("Tokens were indexed, but no matching model prices are available.")
+                )
+                .frame(height: 196)
+            case .available:
                 Chart {
                     ForEach(chartSeries) { series in
                         ForEach(series.points) { point in
@@ -599,7 +607,10 @@ struct HistoryView: View {
     }
 
     private var primaryHeadline: String {
-        chartMetric == .cost ? totalEstimatedCost.usdString : totalTokens.compactTokenString
+        if chartMetric == .cost, totalEstimatedCost == 0, totalUnknownPricingCount > 0 {
+            return "—"
+        }
+        return chartMetric == .cost ? totalEstimatedCost.usdString : totalTokens.compactTokenString
     }
 
     private var primaryLabel: String {
@@ -608,8 +619,24 @@ struct HistoryView: View {
 
     private var primaryDescription: String {
         chartMetric == .cost
-            ? "Estimated API value of your observed usage. Subscription charges may differ."
+            ? "Estimated API value of your observed usage. Subscription charges may differ. \(pricingStatusDescription)"
             : "Observed usage reconstructed locally from Claude and Codex transcripts."
+    }
+
+    private var pricingStatusDescription: String {
+        switch model.pricingCatalog.status {
+        case .fresh:
+            "Pricing refreshed \(pricingDateDescription)."
+        case .cached:
+            "Using cached pricing from \(pricingDateDescription)."
+        case .fallback:
+            "Using the limited bundled pricing catalogue."
+        }
+    }
+
+    private var pricingDateDescription: String {
+        guard let fetchedAt = model.pricingCatalog.fetchedAt else { return "recently" }
+        return fetchedAt.formatted(date: .abbreviated, time: .omitted)
     }
 
     private var totalTokens: Int {
@@ -706,6 +733,17 @@ struct HistoryView: View {
                 }
             )
         }
+    }
+
+    private var chartAvailability: UsageChartAvailability {
+        UsageChartAvailability.resolve(
+            metric: chartMetric,
+            totalTokens: totalTokens,
+            hasNonZeroPoints: chartSeries.contains { series in
+                series.points.contains { $0.value != 0 }
+            },
+            hasUnpricedSamples: totalUnknownPricingCount > 0
+        )
     }
 
     private var breakdownRows: [UsageBreakdownRow] {
@@ -862,7 +900,10 @@ private struct ProviderCostRow: View {
     }
 
     private var primaryValue: String {
-        metric == .cost ? overview.estimatedCost.usdString : overview.totalTokens.compactTokenString
+        if metric == .cost, overview.estimatedCost == 0, overview.unknownPricingCount > 0 {
+            return "—"
+        }
+        return metric == .cost ? overview.estimatedCost.usdString : overview.totalTokens.compactTokenString
     }
 
     private var secondaryValue: String {
@@ -1105,11 +1146,28 @@ private struct UsageBreakdownRow: Identifiable {
     }
 }
 
-private enum UsageChartMetric: String, CaseIterable, Identifiable {
+enum UsageChartMetric: String, CaseIterable, Identifiable {
     case cost
     case tokens
     var id: String { rawValue }
     var title: String { rawValue.capitalized }
+}
+
+enum UsageChartAvailability: Equatable {
+    case available
+    case noUsage
+    case costUnavailable
+
+    static func resolve(
+        metric: UsageChartMetric,
+        totalTokens: Int,
+        hasNonZeroPoints: Bool,
+        hasUnpricedSamples: Bool
+    ) -> UsageChartAvailability {
+        if hasNonZeroPoints { return .available }
+        if totalTokens == 0 { return .noUsage }
+        return metric == .cost && hasUnpricedSamples ? .costUnavailable : .available
+    }
 }
 
 private enum UsageBreakdownDimension: String, CaseIterable, Identifiable {
