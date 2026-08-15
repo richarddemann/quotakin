@@ -156,7 +156,7 @@ cat > "$app_path/Contents/Info.plist" <<PLIST
     <key>SUPublicEDKey</key>
     <string>WHeTB+yjYiUnLi3EhVsgEgCfa3MyllBs3gQJHFTxzJI=</string>
     <key>SUEnableAutomaticChecks</key>
-    <true/>
+    <false/>
 </dict>
 </plist>
 PLIST

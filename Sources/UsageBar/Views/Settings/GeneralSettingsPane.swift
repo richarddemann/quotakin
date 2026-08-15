@@ -73,7 +73,19 @@ struct RefreshSettingsPresentation {
 
 struct GeneralSettingsPane: View {
     @ObservedObject var model: AppModel
+    var automaticallyChecksForAppUpdates: Binding<Bool>?
+    var checkForUpdates: (() -> Void)?
     @State private var showsCustomRefreshSettings = false
+
+    init(
+        model: AppModel,
+        automaticallyChecksForAppUpdates: Binding<Bool>? = nil,
+        checkForUpdates: (() -> Void)? = nil
+    ) {
+        self.model = model
+        self.automaticallyChecksForAppUpdates = automaticallyChecksForAppUpdates
+        self.checkForUpdates = checkForUpdates
+    }
 
     var body: some View {
         Form {
@@ -130,6 +142,19 @@ struct GeneralSettingsPane: View {
                 Text("Update Status")
             }
 
+            if let automaticallyChecksForAppUpdates {
+                Section {
+                    Toggle(
+                        "Automatically check for new versions",
+                        isOn: automaticallyChecksForAppUpdates
+                    )
+                } header: {
+                    Text("App Updates")
+                } footer: {
+                    Text("You can always check manually from Support or the More menu in the Quotakin popover.")
+                }
+            }
+
             Section {
                 Button("Show Welcome Guide…") {
                     model.showOnboarding()
@@ -151,6 +176,9 @@ struct GeneralSettingsPane: View {
             }
 
             Section {
+                if let checkForUpdates {
+                    Button("Check for Updates…", action: checkForUpdates)
+                }
                 Button("Report a Bug…") {
                     BugReporter.openPrefilledIssue()
                 }

@@ -88,6 +88,12 @@ write_info_plist() {
     <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>SUFeedURL</key>
+    <string>https://github.com/richarddemann/quotakin/releases/latest/download/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>WHeTB+yjYiUnLi3EhVsgEgCfa3MyllBs3gQJHFTxzJI=</string>
+    <key>SUEnableAutomaticChecks</key>
+    <false/>
 </dict>
 </plist>
 PLIST
@@ -110,6 +116,7 @@ bin_path=$(cd "$repo_root" && swift build -c release --show-bin-path)
 
 executable_path="$bin_path/$executable_name"
 resource_bundle_path="$bin_path/$resource_bundle_name"
+sparkle_framework_path="$bin_path/Sparkle.framework"
 app_icon_path="$resource_bundle_path/$source_app_icon_name"
 license_path="$repo_root/LICENSE"
 third_party_notices_path="$repo_root/THIRD_PARTY_NOTICES.md"
@@ -121,6 +128,11 @@ fi
 
 if [ ! -d "$resource_bundle_path" ]; then
     echo "Missing resource bundle: $resource_bundle_path" >&2
+    exit 1
+fi
+
+if [ ! -d "$sparkle_framework_path" ]; then
+    echo "Missing Sparkle framework: $sparkle_framework_path" >&2
     exit 1
 fi
 
@@ -168,14 +180,19 @@ rm -rf "$app_path"
 if [ "$legacy_app_path" != "$app_path" ] && [ -d "$legacy_app_path" ]; then
     rm -rf "$legacy_app_path"
 fi
-mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources"
+mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources" "$app_path/Contents/Frameworks"
 cp "$executable_path" "$app_path/Contents/MacOS/$executable_name"
 cp -R "$resource_bundle_path" "$app_path/Contents/Resources/$resource_bundle_name"
+cp -R "$sparkle_framework_path" "$app_path/Contents/Frameworks/Sparkle.framework"
 cp "$app_icon_path" "$app_path/Contents/Resources/$app_icon_name"
 cp "$license_path" "$app_path/Contents/Resources/LICENSE.txt"
 cp "$third_party_notices_path" "$app_path/Contents/Resources/THIRD_PARTY_NOTICES.md"
 
 write_info_plist > "$app_path/Contents/Info.plist"
+
+/usr/bin/install_name_tool \
+    -add_rpath "@executable_path/../Frameworks" \
+    "$app_path/Contents/MacOS/$executable_name"
 
 if command -v codesign >/dev/null 2>&1; then
     codesign --force --deep --sign - "$app_path" >/dev/null

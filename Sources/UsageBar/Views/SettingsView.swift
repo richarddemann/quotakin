@@ -45,6 +45,18 @@ enum SettingsDestination: String, CaseIterable, Identifiable {
 
 struct SettingsView: View {
     @ObservedObject var model: AppModel
+    var automaticallyChecksForAppUpdates: Binding<Bool>?
+    var checkForUpdates: (() -> Void)?
+
+    init(
+        model: AppModel,
+        automaticallyChecksForAppUpdates: Binding<Bool>? = nil,
+        checkForUpdates: (() -> Void)? = nil
+    ) {
+        self.model = model
+        self.automaticallyChecksForAppUpdates = automaticallyChecksForAppUpdates
+        self.checkForUpdates = checkForUpdates
+    }
 
     var body: some View {
         TabView {
@@ -64,7 +76,11 @@ struct SettingsView: View {
             }
 
             Tab(SettingsDestination.advanced.title, systemImage: SettingsDestination.advanced.systemImage) {
-                GeneralSettingsPane(model: model)
+                GeneralSettingsPane(
+                    model: model,
+                    automaticallyChecksForAppUpdates: automaticallyChecksForAppUpdates,
+                    checkForUpdates: checkForUpdates
+                )
                     .settingsPaneFrame()
             }
         }

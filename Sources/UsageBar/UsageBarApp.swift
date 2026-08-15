@@ -49,7 +49,14 @@ struct QuotakinApp: App {
         .windowResizability(.contentSize)
 
         Settings {
-            SettingsView(model: model)
+            SettingsView(
+                model: model,
+                automaticallyChecksForAppUpdates: Binding(
+                    get: { updaterController.updater.automaticallyChecksForUpdates },
+                    set: { updaterController.updater.automaticallyChecksForUpdates = $0 }
+                ),
+                checkForUpdates: { updaterController.checkForUpdates(nil) }
+            )
                 .task {
                     await model.start()
                 }

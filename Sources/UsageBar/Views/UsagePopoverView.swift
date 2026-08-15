@@ -59,24 +59,6 @@ struct UsagePopoverView: View {
 
                 Spacer()
 
-                if let checkForUpdates {
-                    Button(action: checkForUpdates) {
-                        Label("Check for Updates…", systemImage: "arrow.triangle.2.circlepath")
-                            .labelStyle(.iconOnly)
-                    }
-                    .help("Check for Updates…")
-                    .accessibilityLabel("Check for Updates…")
-                }
-
-                Button {
-                    BugReporter.openPrefilledIssue()
-                } label: {
-                    Label("Report a Bug…", systemImage: "ladybug")
-                        .labelStyle(.iconOnly)
-                }
-                .help("Report a Bug…")
-                .accessibilityLabel("Report a Bug…")
-
                 Button {
                     openSettings()
                 } label: {
@@ -86,17 +68,40 @@ struct UsagePopoverView: View {
                 .help("Settings")
                 .accessibilityLabel("Settings")
 
-                Button {
-                    quitAction()
+                Menu {
+                    if let checkForUpdates {
+                        Button(action: checkForUpdates) {
+                            Label("Check for Updates…", systemImage: "arrow.triangle.2.circlepath")
+                        }
+
+                        Divider()
+                    }
+
+                    Button {
+                        BugReporter.openPrefilledIssue()
+                    } label: {
+                        Label("Report a Bug…", systemImage: "ladybug")
+                    }
+
+                    Divider()
+
+                    Button {
+                        quitAction()
+                    } label: {
+                        Label(ApplicationQuitAction.title, systemImage: ApplicationQuitAction.systemImage)
+                    }
+                    .keyboardShortcut("q", modifiers: .command)
+                    .accessibilityHint(ApplicationQuitAction.accessibilityHint)
                 } label: {
-                    Label(ApplicationQuitAction.title, systemImage: ApplicationQuitAction.systemImage)
+                    Label("More", systemImage: "ellipsis")
                         .labelStyle(.iconOnly)
+                        .frame(width: 16, height: 16)
                 }
-                .help(ApplicationQuitAction.title)
-                .accessibilityLabel(ApplicationQuitAction.title)
-                .accessibilityHint(ApplicationQuitAction.accessibilityHint)
-                .keyboardShortcut("q", modifiers: .command)
+                .menuIndicator(.hidden)
+                .help("More")
+                .accessibilityLabel("More actions")
             }
+            .controlSize(.regular)
 
             if let notice = actionableStatus {
                 Text(notice)

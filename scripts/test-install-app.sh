@@ -23,9 +23,13 @@ printf '%s\n' "$plist" | /usr/bin/plutil -lint - >/dev/null
 icon_name=$(printf '%s\n' "$plist" | /usr/bin/plutil -extract CFBundleIconFile raw -o - -)
 minimum_system=$(printf '%s\n' "$plist" | /usr/bin/plutil -extract LSMinimumSystemVersion raw -o - -)
 ui_element=$(printf '%s\n' "$plist" | /usr/bin/plutil -extract LSUIElement raw -o - -)
+update_feed=$(printf '%s\n' "$plist" | /usr/bin/plutil -extract SUFeedURL raw -o - -)
+automatic_update_checks=$(printf '%s\n' "$plist" | /usr/bin/plutil -extract SUEnableAutomaticChecks raw -o - -)
 test "$icon_name" = Quotakin.icns
 test "$minimum_system" = 26.0
 test "$ui_element" = true
+test "$update_feed" = "https://github.com/richarddemann/quotakin/releases/latest/download/appcast.xml"
+test "$automatic_update_checks" = false
 
 test -f "$checked_in_icon"
 test -f "$repo_root/LICENSE"
