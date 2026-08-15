@@ -9,13 +9,16 @@ Quotakin shows your five-hour and weekly capacity before it becomes a surprise. 
 ## Install
 
 ```sh
-brew install richarddemann/tap/quotakin
-quotakin
+brew install --cask richarddemann/tap/quotakin
 ```
 
 Update anytime with `brew upgrade richarddemann/tap/quotakin`.
 
-Quotakin currently supports macOS 26 or later and works with Claude Code, Codex, or both. The Homebrew release is built locally and requires Xcode 26.
+Or download the DMG from [GitHub Releases](https://github.com/richarddemann/quotakin/releases), drag Quotakin into Applications, then right-click it and choose **Open** the first time. If macOS still blocks it, use **System Settings → Privacy & Security → Open Anyway**. Managed Macs may prohibit unnotarized apps entirely.
+
+Quotakin currently supports macOS 26 or later and works with Claude Code, Codex, or both. Releases are prebuilt; installing Quotakin does not require Xcode.
+
+Quotakin is independently distributed without Apple Developer Program notarization. macOS therefore asks you to confirm the first launch. Release archives and in-app updates are cryptographically signed by Quotakin's Sparkle update key.
 
 ## At a glance
 

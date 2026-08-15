@@ -90,6 +90,7 @@ bin_path=$(swift build -c release --disable-sandbox --arch arm64 --arch x86_64 -
 
 executable_path="$bin_path/Quotakin"
 resource_bundle_path="$bin_path/Quotakin_UsageBar.bundle"
+sparkle_framework_path="$bin_path/Sparkle.framework"
 app_icon_path="$resource_bundle_path/UsageBar.icns"
 if [ ! -f "$app_icon_path" ]; then
     app_icon_path="$resource_bundle_path/Contents/Resources/UsageBar.icns"
@@ -100,14 +101,15 @@ if [ ! -x "$executable_path" ]; then
     exit 1
 fi
 
-if [ ! -d "$resource_bundle_path" ] || [ ! -f "$app_icon_path" ]; then
+if [ ! -d "$resource_bundle_path" ] || [ ! -f "$app_icon_path" ] || [ ! -d "$sparkle_framework_path" ]; then
     echo "Missing release resources in $bin_path" >&2
     exit 1
 fi
 
-mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources"
+mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources" "$app_path/Contents/Frameworks"
 /usr/bin/ditto "$executable_path" "$app_path/Contents/MacOS/Quotakin"
 /usr/bin/ditto "$resource_bundle_path" "$app_path/Contents/Resources/Quotakin_UsageBar.bundle"
+/usr/bin/ditto "$sparkle_framework_path" "$app_path/Contents/Frameworks/Sparkle.framework"
 /usr/bin/ditto "$app_icon_path" "$app_path/Contents/Resources/Quotakin.icns"
 /usr/bin/ditto "$repo_root/LICENSE" "$app_path/Contents/Resources/LICENSE.txt"
 /usr/bin/ditto "$repo_root/THIRD_PARTY_NOTICES.md" "$app_path/Contents/Resources/THIRD_PARTY_NOTICES.md"
@@ -142,6 +144,12 @@ cat > "$app_path/Contents/Info.plist" <<PLIST
     <key>LSUIElement</key>
     <true/>
     <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>SUFeedURL</key>
+    <string>https://github.com/richarddemann/quotakin/releases/latest/download/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>WHeTB+yjYiUnLi3EhVsgEgCfa3MyllBs3gQJHFTxzJI=</string>
+    <key>SUEnableAutomaticChecks</key>
     <true/>
 </dict>
 </plist>

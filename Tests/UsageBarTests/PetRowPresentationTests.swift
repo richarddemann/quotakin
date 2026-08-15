@@ -4,7 +4,7 @@ import UsageCore
 @testable import UsageBar
 
 @Test
-func automaticPetSelectionUsesProviderDefaultsWhenOfficialPacksAreAvailable() {
+func freshInstallUsesAutomaticClaudePetAndSelectedCodexPet() {
     let available = ["bsod", "codex", "dewey", "fireball"]
 
     #expect(PetRowPresentation.resolvedPackID(
@@ -16,7 +16,7 @@ func automaticPetSelectionUsesProviderDefaultsWhenOfficialPacksAreAvailable() {
         for: .codex,
         preferences: .default,
         availablePackIDs: available
-    ) == "codex")
+    ) == "bsod")
 }
 
 @Test

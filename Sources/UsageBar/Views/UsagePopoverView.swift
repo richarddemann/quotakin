@@ -4,15 +4,18 @@ import SwiftUI
 struct UsagePopoverView: View {
     @ObservedObject var model: AppModel
     private let quitAction: ApplicationQuitAction
+    private let checkForUpdates: (() -> Void)?
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettingsAction
 
     init(
         model: AppModel,
-        quitAction: ApplicationQuitAction = .live
+        quitAction: ApplicationQuitAction = .live,
+        checkForUpdates: (() -> Void)? = nil
     ) {
         self.model = model
         self.quitAction = quitAction
+        self.checkForUpdates = checkForUpdates
     }
 
     var body: some View {
@@ -55,6 +58,15 @@ struct UsagePopoverView: View {
                 .accessibilityLabel("Usage Overview")
 
                 Spacer()
+
+                if let checkForUpdates {
+                    Button(action: checkForUpdates) {
+                        Label("Check for Updates…", systemImage: "arrow.triangle.2.circlepath")
+                            .labelStyle(.iconOnly)
+                    }
+                    .help("Check for Updates…")
+                    .accessibilityLabel("Check for Updates…")
+                }
 
                 Button {
                     BugReporter.openPrefilledIssue()

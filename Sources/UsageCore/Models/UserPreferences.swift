@@ -184,7 +184,12 @@ public struct UserPreferences: Codable, Equatable, Sendable {
         self.petSelection = petSelection
     }
 
-    public static let `default` = UserPreferences()
+    /// Fresh installs use the compact companion presentation while account
+    /// access remains an explicit, per-provider choice.
+    public static let `default` = UserPreferences(
+        petModeEnabled: true,
+        petSelection: [.codex: "bsod"]
+    )
     public static let iconOnly = UserPreferences(providers: [], menuBarMetrics: [])
 
     private enum CodingKeys: String, CodingKey {

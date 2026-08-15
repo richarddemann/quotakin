@@ -1,12 +1,21 @@
+import Sparkle
 import SwiftUI
 
 @main
 struct QuotakinApp: App {
     @StateObject private var model = AppModel.live()
+    private let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
 
     var body: some Scene {
         MenuBarExtra {
-            UsagePopoverView(model: model)
+            UsagePopoverView(
+                model: model,
+                checkForUpdates: { updaterController.checkForUpdates(nil) }
+            )
                 .task {
                     await model.start()
                 }

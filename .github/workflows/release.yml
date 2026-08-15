@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate release tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Release tag must use vMAJOR.MINOR.PATCH." >&2
+            exit 64
+          fi
+          if (( BASH_REMATCH[2] > 999 || BASH_REMATCH[3] > 999 )); then
+            echo "Minor and patch versions must be below 1000." >&2
+            exit 64
+          fi
+
+      - name: Test
+        run: ./scripts/test.sh
+
+      - name: Build app and release containers
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: |
+          version="${VERSION#v}"
+          IFS=. read -r major minor patch <<< "$version"
+          build_number=$((major * 1000000 + minor * 1000 + patch))
+          ./scripts/build-release-app.sh \
+            --version "$version" \
+            --build-number "$build_number" \
+            --output "$RUNNER_TEMP/Quotakin.app" \
+            --identity -
+          ./scripts/create-release-assets.sh \
+            --app "$RUNNER_TEMP/Quotakin.app" \
+            --version "$version" \
+            --output-dir "$RUNNER_TEMP/release"
+
+      - name: Generate signed Sparkle appcast
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          test -n "$SPARKLE_PRIVATE_KEY"
+          mkdir "$RUNNER_TEMP/appcast"
+          cp "$RUNNER_TEMP/release/Quotakin-${TAG#v}.zip" "$RUNNER_TEMP/appcast/"
+          printf '%s' "$SPARKLE_PRIVATE_KEY" | \
+            .build/artifacts/sparkle/Sparkle/bin/generate_appcast \
+              --ed-key-file - \
+              --download-url-prefix "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/" \
+              --link "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}" \
+              -o appcast.xml \
+              "$RUNNER_TEMP/appcast"
+          cp "$RUNNER_TEMP/appcast/appcast.xml" "$RUNNER_TEMP/release/appcast.xml"
+
+      - name: Record checksums
+        run: |
+          cd "$RUNNER_TEMP/release"
+          shasum -a 256 Quotakin-* > SHA256SUMS.txt
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "$RUNNER_TEMP/release/Quotakin-${GITHUB_REF_NAME#v}.dmg" \
+            "$RUNNER_TEMP/release/Quotakin-${GITHUB_REF_NAME#v}.zip" \
+            "$RUNNER_TEMP/release/appcast.xml" \
+            "$RUNNER_TEMP/release/SHA256SUMS.txt" \
+            --repo "$GITHUB_REPOSITORY" \
+            --generate-notes \
+            --title "Quotakin ${GITHUB_REF_NAME#v}"

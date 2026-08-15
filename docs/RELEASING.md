@@ -5,16 +5,24 @@ The packaging scripts create the same two artifacts commonly offered by native m
 - `Quotakin-VERSION.zip`, containing the app for direct installation.
 - `Quotakin-VERSION.dmg`, containing the app and an Applications shortcut.
 
-CI validates the universal app and both containers with an ad-hoc signature. Do not publish those validation artifacts: a public release must use a Developer ID Application certificate and Apple notarization.
+CI validates the universal app and both containers with an ad-hoc signature. The tag release workflow publishes the same prebuilt app for users who accept macOS's first-launch confirmation. Release archives are additionally signed with Quotakin's Sparkle Ed25519 update key.
 
-## Apple prerequisites
+This is intentionally an unnotarized distribution while the project has no Apple Developer Program membership. Never describe these artifacts as notarized or as Gatekeeper-trusted.
 
-The release owner must be enrolled in the Apple Developer Program and create:
+## Optional Apple prerequisites
+
+For a warning-free first launch, the release owner must be enrolled in the Apple Developer Program and create:
 
 - A **Developer ID Application** certificate with its private key.
 - Notarization credentials for the same Apple developer team.
 
-Keep the certificate, private key, and notarization credentials outside the repository.
+Keep the certificate, private key, and notarization credentials outside the repository. They are not required for the current transparent ad-hoc release channel.
+
+## Automated tag release
+
+Store the Sparkle private key as the `SPARKLE_PRIVATE_KEY` GitHub Actions secret. Pushing an incremented `vMAJOR.MINOR.PATCH` tag runs tests, builds the universal app, creates DMG and ZIP artifacts, signs the ZIP update, generates `appcast.xml`, records checksums, and publishes the GitHub release.
+
+The workflow derives a monotonically increasing `CFBundleVersion` as `major × 1,000,000 + minor × 1,000 + patch`; release components must therefore stay below 1,000. After publication, update the Homebrew Cask to the release ZIP and its SHA-256.
 
 ## Build a signed app
 
@@ -45,4 +53,4 @@ xcrun stapler validate /absolute/path/to/Quotakin.app
 
 Submit the DMG to the notary service as well, staple its accepted ticket, and validate both the app and DMG with Gatekeeper before uploading them to GitHub Releases. Record SHA-256 checksums for both assets.
 
-After publication, update the Homebrew tap's Cask URL, version, and SHA-256 to the notarized ZIP. Keep the source-building Formula available until the Cask passes installation testing on a clean Mac.
+If this optional Developer ID path is adopted later, update the Homebrew Cask to the notarized ZIP after publication. For the current ad-hoc channel, point the Cask to the transparently unnotarized ZIP produced by the automated tag workflow.

@@ -129,7 +129,7 @@ func refreshIntervalsMatchProfiles() {
 }
 
 @Test
-func defaultPreferencesUseIconOnlyMenuBarForBothProviders() {
+func freshInstallUsesCompactPetPresentationWithoutGrantingAccountAccess() {
     #expect(UserPreferences.default.refreshProfile == .efficient)
     #expect(UserPreferences.default.liveQuotaRefreshInterval == .oneMinute)
     #expect(UserPreferences.default.providers == [.claude, .codex])
@@ -137,9 +137,9 @@ func defaultPreferencesUseIconOnlyMenuBarForBothProviders() {
     #expect(UserPreferences.default.quotaDisplayMode == .remaining)
     #expect(UserPreferences.default.menuBarMetrics == [])
     #expect(UserPreferences.default.notificationPreferences == QuotaNotificationPreferences())
-    #expect(UserPreferences.default.petModeEnabled == false)
+    #expect(UserPreferences.default.petModeEnabled)
     #expect(UserPreferences.default.showProviderNamesInPetMode == false)
-    #expect(UserPreferences.default.petSelection == [:])
+    #expect(UserPreferences.default.petSelection == [.codex: "bsod"])
 }
 
 @Test
