@@ -5,11 +5,12 @@
   <p><strong>macOS 26 or later</strong></p>
 </div>
 
-<p align="center">
-  <img src="docs/assets/quotakin-menu-bar.png" width="400" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+<p>
+  <img align="left" src="docs/assets/quotakin-menu-bar.png" width="360" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+  Quotakin keeps your current quota close at hand, including reset times and usage pace. Open the history window when you want the larger picture: activity, models, tokens, and estimated cost.
 </p>
 
-Quotakin keeps your current quota close at hand, including reset times and usage pace. Open the history window when you want the larger picture: activity, models, tokens, and estimated cost.
+<br clear="left">
 
 ## Download
 
