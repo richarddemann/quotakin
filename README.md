@@ -7,7 +7,7 @@
 
 ## Know your usage before it becomes a surprise
 
-<img align="right" width="260" src="https://github.com/user-attachments/assets/341e3ac7-e90f-47c5-bf68-d4e1a3d18986" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+<img align="right" hspace="40" width="260" src="https://github.com/user-attachments/assets/341e3ac7-e90f-47c5-bf68-d4e1a3d18986" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
 
 Both providers' limits in one place, updated as you work.
 
