@@ -35,7 +35,10 @@
 brew install --cask richarddemann/tap/quotakin
 ```
 
-> Quotakin is not Apple-notarized. On first launch, right-click the app and choose **Open**. If macOS still blocks it, go to **System Settings → Privacy & Security → Open Anyway**. Managed Macs may not permit unnotarized apps.
+> **Quotakin is not Apple-notarized!**  
+> On first launch, right-click the app and choose **"Open"**.   
+> If macOS still blocks it, go to **"System Settings" → "Privacy & Security" → "Open Anyway"**.  
+> Managed Macs **may not permit** unnotarized apps.  
 
 ## See where the tokens went
 
