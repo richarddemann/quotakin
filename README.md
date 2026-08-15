@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/assets/quotakin-icon.png" width="48" alt="Quotakin app icon">
+  <img src="docs/assets/quotakin-icon.png" width="80" alt="Quotakin app icon">
   <h1>Quotakin</h1>
   <p>Your Claude and Codex usage, living quietly in the menu bar.</p>
   <p><strong>macOS 26 or later</strong></p>
