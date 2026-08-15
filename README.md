@@ -27,7 +27,7 @@
 
 **[Download Quotakin for macOS](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
 
-Open the DMG and drag Quotakin into Applications.
+
 
 Or install it with Homebrew:
 
