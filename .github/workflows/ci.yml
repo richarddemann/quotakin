@@ -52,3 +52,6 @@ jobs:
             --output-dir "$RUNNER_TEMP/release"
           unzip -t "$RUNNER_TEMP/release/Quotakin-0.0.0.zip"
           hdiutil verify "$RUNNER_TEMP/release/Quotakin-0.0.0.dmg"
+          mkdir "$RUNNER_TEMP/extracted"
+          ditto -x -k "$RUNNER_TEMP/release/Quotakin-0.0.0.zip" "$RUNNER_TEMP/extracted"
+          ./scripts/smoke-test-release-app.sh "$RUNNER_TEMP/extracted/Quotakin.app"

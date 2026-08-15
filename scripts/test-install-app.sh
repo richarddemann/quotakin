@@ -33,7 +33,8 @@ test -f "$repo_root/THIRD_PARTY_NOTICES.md"
 generated_icon="$temporary_root/UsageBar.icns"
 SWIFT_MODULECACHE_PATH="$temporary_root/SwiftModuleCache" \
 CLANG_MODULE_CACHE_PATH="$temporary_root/ClangModuleCache" \
-    /usr/bin/swift "$repo_root/scripts/generate-app-icon.swift" "$generated_icon"
+    /usr/bin/swift "$repo_root/scripts/generate-app-icon.swift" \
+        "$repo_root/docs/assets/quotakin-icon.png" "$generated_icon"
 cmp "$checked_in_icon" "$generated_icon"
 
 extracted_iconset="$temporary_root/UsageBar.iconset"

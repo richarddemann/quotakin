@@ -37,7 +37,7 @@ Choose a small quota companion for the menu bar, switch to a simpler display, an
 
 ## Private by design
 
-Your prompts and responses stay out of Quotakin. Summary usage data stays on your Mac, provider credentials and cookies are not copied, and account checks only begin after you choose to connect.
+Your prompts and responses stay out of Quotakin. Summary usage data stays on your Mac, provider credentials and cookies are not copied, and account checks only begin after you choose **Connect** or **Check**.
 
 [Privacy details](docs/PRIVACY.md)
 

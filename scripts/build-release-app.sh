@@ -114,6 +114,12 @@ mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources" "$app_path/Co
 /usr/bin/ditto "$repo_root/LICENSE" "$app_path/Contents/Resources/LICENSE.txt"
 /usr/bin/ditto "$repo_root/THIRD_PARTY_NOTICES.md" "$app_path/Contents/Resources/THIRD_PARTY_NOTICES.md"
 
+# SwiftPM links dynamic products with an executable-relative lib rpath. A
+# conventional app bundle keeps frameworks in Contents/Frameworks instead.
+/usr/bin/install_name_tool \
+    -add_rpath "@executable_path/../Frameworks" \
+    "$app_path/Contents/MacOS/Quotakin"
+
 cat > "$app_path/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -169,6 +175,8 @@ fi
 /usr/bin/codesign --verify --deep --strict --verbose=2 "$app_path"
 /usr/bin/plutil -lint "$app_path/Contents/Info.plist"
 /usr/bin/lipo "$app_path/Contents/MacOS/Quotakin" -verify_arch arm64 x86_64
+/usr/bin/otool -l "$app_path/Contents/MacOS/Quotakin" | \
+    /usr/bin/grep -F "path @executable_path/../Frameworks" >/dev/null
 
 /usr/bin/ditto "$app_path" "$output_path"
 echo "Built $output_path"
