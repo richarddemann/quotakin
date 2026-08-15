@@ -5,13 +5,18 @@
   <p><strong>macOS 26 or later</strong></p>
 </div>
 
-<img align="right" src="docs/assets/quotakin-menu-bar.png" width="360" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
-
 ## Know your usage before it becomes a surprise
 
-- See five-hour and weekly limits.
+
+
+- See five-hour and weekly limits. <img align="right" src="docs/assets/quotakin-menu-bar.png" width="360" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+  
+
+  
 - Know when each window resets and whether usage is on pace.
+  
 - Open History for activity, models, tokens, and estimated cost.
+  
 - Choose a small quota companion for the menu bar!
 
 **[Download Quotakin for macOS →](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
