@@ -1,11 +1,12 @@
 <div align="center">
-  <h1><img src="docs/assets/quotakin-icon.png" width="48" alt=""> Quotakin</h1>
+  <img src="docs/assets/quotakin-icon.png" width="48" alt="Quotakin app icon">
+  <h1>Quotakin</h1>
   <p>Your Claude and Codex usage, living quietly in the menu bar.</p>
   <p><strong>macOS 26 or later</strong></p>
 </div>
 
 <p align="center">
-  <img src="docs/assets/quotakin-menu-bar.png" width="480" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+  <img src="docs/assets/quotakin-menu-bar.png" width="400" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
 </p>
 
 Quotakin keeps your current quota close at hand, including reset times and usage pace. Open the history window when you want the larger picture: activity, models, tokens, and estimated cost.
