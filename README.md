@@ -42,8 +42,10 @@ brew install --cask richarddemann/tap/quotakin
 Quotakin reads local Claude Code and Codex usage records to build a daily history. Connect either provider (or both) when you also want live account quota.
 
 <p align="center">
-  <img src="docs/assets/quotakin-usage.png" width="650" alt="Quotakin usage history with cost, token, activity, and provider breakdowns">
+  <img src="https://github.com/user-attachments/assets/5bb40ce9-8936-4cc7-938b-f89cb7adec98" width="650" alt="Quotakin usage history with cost, token, activity, and provider breakdowns">
 </p>
+
+
 
 ## Private by design
 
