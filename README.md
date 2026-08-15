@@ -7,11 +7,12 @@
 
 <img align="right" src="docs/assets/quotakin-menu-bar.png" width="360" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
 
-## Know your quota before it becomes a surprise
+## Know your usage before it becomes a surprise
 
-- See five-hour and weekly capacity together.
+- See five-hour and weekly limits.
 - Know when each window resets and whether usage is on pace.
 - Open History for activity, models, tokens, and estimated cost.
+- Choose a small quota companion for the menu bar!
 
 **[Download Quotakin for macOS →](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
 
@@ -21,7 +22,7 @@
 
 **[Download Quotakin for macOS](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
 
-Open the DMG and drag Quotakin into Applications. No Xcode is required.
+Open the DMG and drag Quotakin into Applications.
 
 Or install it with Homebrew:
 
@@ -37,7 +38,7 @@ brew install --cask richarddemann/tap/quotakin
   <img src="docs/assets/quotakin-usage.png" width="760" alt="Quotakin usage history with cost, token, activity, and provider breakdowns">
 </p>
 
-Quotakin reads local Claude Code and Codex usage records to build a daily history. Connect either provider—or both—when you also want live account quota.
+Quotakin reads local Claude Code and Codex usage records to build a daily history. Connect either provider (or both) when you also want live account quota.
 
 Choose a small quota companion for the menu bar, switch to a simpler display, and optionally get an alert before capacity becomes tight.
 
