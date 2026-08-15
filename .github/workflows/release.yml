@@ -65,7 +65,7 @@ jobs:
               --ed-key-file - \
               --download-url-prefix "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/" \
               --link "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}" \
-              -o appcast.xml \
+              -o "$RUNNER_TEMP/appcast/appcast.xml" \
               "$RUNNER_TEMP/appcast"
           cp "$RUNNER_TEMP/appcast/appcast.xml" "$RUNNER_TEMP/release/appcast.xml"
 
