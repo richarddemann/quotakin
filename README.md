@@ -24,12 +24,12 @@
 <br clear="right">
 
 ## Download
+**Download Quotakin for macOS:**
 
-**[Download Quotakin for macOS](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
+**[Quotakin.dmg](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
 
 
-
-Or install it with Homebrew:
+**Or install it with Homebrew:**
 
 ```sh
 brew install --cask richarddemann/tap/quotakin
