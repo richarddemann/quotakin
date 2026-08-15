@@ -1,48 +1,53 @@
 <div align="center">
-  <img src="docs/assets/quotakin-icon.png" width="128" alt="Quotakin app icon">
+  <img src="docs/assets/quotakin-icon.png" width="112" alt="Quotakin app icon">
   <h1>Quotakin</h1>
-  <p>Keep an eye on your Claude and Codex quota—with a little companion in the menu bar.</p>
-  <p><strong>For macOS 26 or later.</strong></p>
+  <p>Your Claude and Codex usage, living quietly in the menu bar.</p>
+  <p><strong>macOS 26 or later</strong></p>
 </div>
 
-Quotakin shows your five-hour and weekly capacity before it becomes a surprise. Open it for reset times, usage pace, token history, and estimated cost—all in a native Mac app.
+<p align="center">
+  <img src="docs/assets/quotakin-menu-bar.png" width="694" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+</p>
 
-## Install
+Quotakin keeps your current quota close at hand, including reset times and usage pace. Open the history window when you want the larger picture: activity, models, tokens, and estimated cost.
 
-### Download for Mac
+## Download
 
 **[Download Quotakin for macOS](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
 
-Open the downloaded `.dmg`, then drag Quotakin into Applications. The first time you launch it, right-click Quotakin and choose **Open**. If macOS still blocks it, use **System Settings → Privacy & Security → Open Anyway**. Managed Macs may prohibit unnotarized apps entirely.
+Open the DMG and drag Quotakin into Applications. No Xcode is required.
 
-### Homebrew
+Or install it with Homebrew:
 
 ```sh
 brew install --cask richarddemann/tap/quotakin
 ```
 
-Update anytime with `brew upgrade richarddemann/tap/quotakin`.
+> Quotakin is not Apple-notarized. On first launch, right-click the app and choose **Open**. If macOS still blocks it, go to **System Settings → Privacy & Security → Open Anyway**. Managed Macs may not permit unnotarized apps.
 
-Quotakin currently supports macOS 26 or later and works with Claude Code, Codex, or both. Releases are prebuilt; installing Quotakin does not require Xcode.
+## See where the tokens went
 
-Quotakin is independently distributed without Apple Developer Program notarization. macOS therefore asks you to confirm the first launch. Release archives and in-app updates are cryptographically signed by Quotakin's Sparkle update key.
+<p align="center">
+  <img src="docs/assets/quotakin-usage.png" width="936" alt="Quotakin usage history with cost, token, activity, and provider breakdowns">
+</p>
 
-## At a glance
+Quotakin reads local Claude Code and Codex usage records to build a daily history. Connect either provider—or both—when you also want live account quota.
 
-- See short- and long-window quota together, including reset timing and pace.
-- Browse daily history, activity, model usage, tokens, and estimated cost.
-- Choose a small quota companion for the menu bar, or a simpler display.
-- Get optional alerts before capacity becomes tight.
+Choose a small quota companion for the menu bar, switch to a simpler display, and optionally get an alert before capacity becomes tight.
 
 ## Private by design
 
-Your prompts and responses stay out of Quotakin. It keeps summary usage data on your Mac, does not copy provider credentials or cookies, and only checks account quota after you ask it to connect.
+Your prompts and responses stay out of Quotakin. Summary usage data stays on your Mac, provider credentials and cookies are not copied, and account checks only begin after you choose to connect.
 
-[Read the privacy details](docs/PRIVACY.md)
+[Privacy details](docs/PRIVACY.md)
+
+## Updates
+
+Quotakin can check for new versions inside the app. Release archives and updates are signed with Quotakin's Sparkle update key.
 
 ## Build from source
 
-Quotakin is a native Swift app. See [Building and testing](docs/BUILDING.md) to run it from a checkout.
+Quotakin is a native Swift app. See [Building and testing](docs/BUILDING.md) to run it from source.
 
 ## License
 
