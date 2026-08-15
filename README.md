@@ -19,9 +19,6 @@
   
 - Choose a small quota companion for the menu bar!
 
-**[Download Quotakin for macOS →](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
-
-<br clear="right">
 
 ## Download
 **Download Quotakin for macOS:**
