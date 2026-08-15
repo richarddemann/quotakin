@@ -72,7 +72,8 @@ jobs:
       - name: Record checksums
         run: |
           cd "$RUNNER_TEMP/release"
-          shasum -a 256 Quotakin-* > SHA256SUMS.txt
+          cp "Quotakin-${GITHUB_REF_NAME#v}.dmg" Quotakin.dmg
+          shasum -a 256 Quotakin-* Quotakin.dmg > SHA256SUMS.txt
 
       - name: Publish GitHub release
         env:
@@ -80,6 +81,7 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" \
             "$RUNNER_TEMP/release/Quotakin-${GITHUB_REF_NAME#v}.dmg" \
+            "$RUNNER_TEMP/release/Quotakin.dmg" \
             "$RUNNER_TEMP/release/Quotakin-${GITHUB_REF_NAME#v}.zip" \
             "$RUNNER_TEMP/release/appcast.xml" \
             "$RUNNER_TEMP/release/SHA256SUMS.txt" \

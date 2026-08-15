@@ -2,19 +2,26 @@
   <img src="docs/assets/quotakin-icon.png" width="128" alt="Quotakin app icon">
   <h1>Quotakin</h1>
   <p>Keep an eye on your Claude and Codex quota—with a little companion in the menu bar.</p>
+  <p><strong>For macOS 26 or later.</strong></p>
 </div>
 
 Quotakin shows your five-hour and weekly capacity before it becomes a surprise. Open it for reset times, usage pace, token history, and estimated cost—all in a native Mac app.
 
 ## Install
 
+### Download for Mac
+
+**[Download Quotakin for macOS](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**
+
+Open the downloaded `.dmg`, then drag Quotakin into Applications. The first time you launch it, right-click Quotakin and choose **Open**. If macOS still blocks it, use **System Settings → Privacy & Security → Open Anyway**. Managed Macs may prohibit unnotarized apps entirely.
+
+### Homebrew
+
 ```sh
 brew install --cask richarddemann/tap/quotakin
 ```
 
 Update anytime with `brew upgrade richarddemann/tap/quotakin`.
-
-Or download the DMG from [GitHub Releases](https://github.com/richarddemann/quotakin/releases), drag Quotakin into Applications, then right-click it and choose **Open** the first time. If macOS still blocks it, use **System Settings → Privacy & Security → Open Anyway**. Managed Macs may prohibit unnotarized apps entirely.
 
 Quotakin currently supports macOS 26 or later and works with Claude Code, Codex, or both. Releases are prebuilt; installing Quotakin does not require Xcode.
 
