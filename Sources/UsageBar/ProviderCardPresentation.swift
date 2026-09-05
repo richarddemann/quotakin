@@ -141,8 +141,11 @@ struct ProviderCardPresentation {
     }
 
     func sourceDetail(for snapshot: QuotaSnapshot) -> String? {
-        if !sourcesMateriallyDiffer, snapshot != primaryQuota {
-            return nil
+        if !sourcesMateriallyDiffer {
+            guard snapshot == primaryQuota else { return nil }
+            if snapshot.source == .account, !isStale(snapshot) {
+                return nil
+            }
         }
 
         let source = switch (snapshot.source, snapshot.freshness(at: now)) {

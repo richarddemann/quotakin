@@ -150,8 +150,6 @@ struct GeneralSettingsPane: View {
                     )
                 } header: {
                     Text("App Updates")
-                } footer: {
-                    Text("You can always check manually from Support or the More menu in the Quotakin popover.")
                 }
             }
 
@@ -248,7 +246,7 @@ struct GeneralSettingsPane: View {
                 at: url,
                 withIntermediateDirectories: true
             )
-            NSWorkspace.shared.activateFileViewerSelecting([url])
+            NSWorkspace.shared.open(url)
         } catch {
             NSWorkspace.shared.open(url.deletingLastPathComponent())
         }

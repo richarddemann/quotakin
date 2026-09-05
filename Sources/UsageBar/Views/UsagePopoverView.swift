@@ -51,11 +51,11 @@ struct UsagePopoverView: View {
                 Button {
                     openHistory()
                 } label: {
-                    Label("Usage Overview", systemImage: "chart.bar.xaxis")
+                    Label("Usage", systemImage: "chart.bar.xaxis")
                         .labelStyle(.iconOnly)
                 }
-                .help("Usage Overview")
-                .accessibilityLabel("Usage Overview")
+                .help("Usage")
+                .accessibilityLabel("Usage")
 
                 Spacer()
 
@@ -97,10 +97,14 @@ struct UsagePopoverView: View {
                         .labelStyle(.iconOnly)
                         .frame(width: 16, height: 16)
                 }
+                .menuStyle(.borderlessButton)
                 .menuIndicator(.hidden)
+                .fixedSize()
+                .modifier(PopoverControlLabel())
                 .help("More")
                 .accessibilityLabel("More actions")
             }
+            .buttonStyle(PopoverControlStyle())
             .controlSize(.regular)
 
             if let notice = actionableStatus {
@@ -135,5 +139,22 @@ struct UsagePopoverView: View {
         // Accessory (LSUIElement) apps don't reliably raise a freshly opened
         // window above the frontmost app; bring Settings forward explicitly.
         WindowFocus.present()
+    }
+}
+
+private struct PopoverControlLabel: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 36, height: 28)
+            .contentShape(RoundedRectangle(cornerRadius: 7))
+            .background(.quaternary, in: RoundedRectangle(cornerRadius: 7))
+    }
+}
+
+private struct PopoverControlStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .modifier(PopoverControlLabel())
+            .opacity(configuration.isPressed ? 0.6 : 1)
     }
 }

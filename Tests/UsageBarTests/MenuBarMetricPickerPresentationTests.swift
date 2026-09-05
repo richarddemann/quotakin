@@ -26,3 +26,9 @@ func addableMetricsHavePopoverPresentationMetadata() {
         #expect(!MenuBarMetricPickerPresentation.detail(for: metric, quotaDisplayMode: .used).isEmpty)
     }
 }
+
+@Test
+func quotaMetricDescriptionsFollowDisplayMode() {
+    #expect(MenuBarMetricPickerPresentation.detail(for: .sessionPercentage, quotaDisplayMode: .remaining) == "5-hour quota left")
+    #expect(MenuBarMetricPickerPresentation.detail(for: .weeklyPercentage, quotaDisplayMode: .used) == "Weekly quota used")
+}

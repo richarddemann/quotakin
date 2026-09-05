@@ -1,19 +1,7 @@
 import AppKit
 
-/// Brings the app's auxiliary windows (Settings, and — when re-enabled in
-/// v0.2 — History) reliably to the front, above whatever app is currently
-/// frontmost.
-///
-/// This app is `LSUIElement`/accessory, and an accessory app can't raise a
-/// window above another app just by ordering it front — `activate` is a no-op
-/// for a policy-`.accessory` app. So on open we briefly promote the app to
-/// `.regular` (which makes activation work, at the cost of a temporary Dock
-/// icon), then demote back to `.accessory` once the last auxiliary window
-/// closes, so the Dock icon doesn't linger.
-///
-/// Two windows use this: History via `bringForward(title:)` (stable NSWindow
-/// title) and Settings via `present()` — the Settings window's title tracks
-/// the selected pane, so it's resolved structurally instead of by a fixed name.
+/// Raises auxiliary windows and shows a Dock icon while they are open.
+/// Returning to accessory mode hides the Dock icon; it does not quit Quotakin.
 enum WindowFocus {
     /// Present the Settings window (or any single auxiliary content window).
     @MainActor
@@ -90,6 +78,7 @@ enum WindowFocus {
             ?? NSApp.windows.first(where: isContentWindow)
     }
 
+    @MainActor
     private static func isContentWindow(_ window: NSWindow) -> Bool {
         window.isVisible
             && window.styleMask.contains(.titled)

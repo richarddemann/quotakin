@@ -1,3 +1,4 @@
+import AppKit
 import Testing
 @testable import UsageBar
 
@@ -16,21 +17,6 @@ func settingsDestinationsFollowUserGoals() {
         "Connections",
         "Advanced"
     ])
-    #expect(SettingsDestination.allCases.map(\.subtitle) == [
-        "Choose what appears in the menu bar and how Quotakin looks.",
-        "Choose when Quotakin should get your attention.",
-        "Connect the providers you use and keep account quota current.",
-        "Manage refresh timing, revisit setup, and find support."
-    ])
-}
-
-@Test
-func settingsDestinationsHaveAccessiblePresentationMetadata() {
-    for destination in SettingsDestination.allCases {
-        #expect(!destination.title.isEmpty)
-        #expect(!destination.subtitle.isEmpty)
-        #expect(!destination.systemImage.isEmpty)
-    }
 }
 
 @Test
@@ -40,4 +26,9 @@ func settingsTabsPinTheirWidthWhileRemainingVerticallyResizable() {
     #expect(SettingsLayout.maximumWindowWidth == 560)
     #expect(SettingsLayout.minimumHeight == 560)
     #expect(SettingsLayout.maximumHeight.isInfinite)
+}
+
+@Test @MainActor
+func closingSettingsDoesNotTerminateMenuBarApp() {
+    #expect(!QuotakinAppDelegate().applicationShouldTerminateAfterLastWindowClosed(NSApplication.shared))
 }

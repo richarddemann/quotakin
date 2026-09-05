@@ -1,55 +1,38 @@
-<div align="center">
-  <img src="docs/assets/quotakin-icon.png" width="80" alt="Quotakin app icon">
-  <h1>Quotakin</h1>
-</div>
+# Quotakin
 
-<p align="center">Your Claude and Codex usage, living quietly in the menu bar.</p>
+A macOS menu-bar app for Claude Code and Codex usage.
 
-## Know your usage before it becomes a surprise
+Shows five-hour and weekly quota, reset times, and local usage history by day and model. You can choose which metrics appear in the menu bar and add a pet to the quota display.
 
-<img align="right" hspace="50" width="260" src="https://github.com/user-attachments/assets/341e3ac7-e90f-47c5-bf68-d4e1a3d18986" alt="Quotakin showing the remaining weekly quota in the macOS menu bar">
+<img width="300" src="https://github.com/user-attachments/assets/341e3ac7-e90f-47c5-bf68-d4e1a3d18986" alt="Quotakin showing remaining weekly quota">
 
-Both providers' limits in one place, updated as you work.
+## Install
 
-- See five-hour and weekly limits.
-- Know when each window resets, and your pace.
-- Browse activity, models, tokens, and cost.
-- Pick a small companion for the menu bar!
-
-<br clear="all">
-
-## Download
-
-Get **[Quotakin.dmg](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg)**, or install it with Homebrew:
+Download [Quotakin.dmg](https://github.com/richarddemann/quotakin/releases/latest/download/Quotakin.dmg), or use Homebrew:
 
 ```sh
 brew install --cask richarddemann/tap/quotakin
 ```
 
-Requires macOS 26 or later. Quotakin checks for new versions inside the app; releases are signed with its Sparkle update key.
+Requires macOS 26 or later. The app is not Apple-notarized. If macOS blocks the first launch, allow it in **System Settings → Privacy & Security → Open Anyway**. Managed Macs may prevent this.
 
-> **Quotakin is not Apple-notarized!**
-> On first launch, right-click the app and choose **"Open"**.
-> If macOS still blocks it, go to **"System Settings" → "Privacy & Security" → "Open Anyway"**.
-> Managed Macs **may not permit** unnotarized apps.
+Check for updates from the app’s More menu or Settings → Advanced. Automatic update checks are optional.
 
-## See where the tokens went
+## Usage
 
-Quotakin reads local Claude Code and Codex usage records to build a daily history. Connect either provider (or both) when you also want live account quota.
+Local history comes from Claude Code and Codex usage records on your Mac. Connect an account in **Settings → Connections** to see its account-wide quota. Stopping account checks leaves local history available.
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/5bb40ce9-8936-4cc7-938b-f89cb7adec98" width="820" alt="Quotakin usage history with cost, token, activity, and provider breakdowns">
-</p>
+History includes token counts, activity, and estimated costs. Cost estimates are not subscription charges or provider bills.
+
+<img width="820" src="https://github.com/user-attachments/assets/5bb40ce9-8936-4cc7-938b-f89cb7adec98" alt="Usage history with token counts, estimated costs, and model breakdowns">
 
 ## Privacy
 
-Your prompts and responses stay out of Quotakin. Summary usage data stays on your Mac, provider credentials and cookies are not copied, and account checks only begin after you choose **Connect** or **Check**.
+Quotakin stores usage summaries locally, without saving prompts, responses, credentials, or cookies. Account checks start when you choose Connect or Check. It also fetches public provider-status and model-pricing data. See [Privacy](docs/PRIVACY.md) for details.
 
-[Privacy details](docs/PRIVACY.md)
+## Development
 
-## Build from source
-
-Quotakin is a native Swift app. See [Building and testing](docs/BUILDING.md) to run it from source.
+Quotakin is built with Swift and SwiftUI. See [Building and testing](docs/BUILDING.md).
 
 ## License
 

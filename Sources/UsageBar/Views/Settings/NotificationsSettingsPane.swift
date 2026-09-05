@@ -22,7 +22,7 @@ struct NotificationsSettingsPane: View {
                 thresholdRow(window: .session, title: "5-hour window")
                 thresholdRow(window: .weekly, title: "Weekly window")
             } header: {
-                Text("Thresholds")
+                Text("Thresholds (% used)")
             }
         }
         .formStyle(.grouped)
@@ -114,13 +114,16 @@ struct NotificationsSettingsPane: View {
     static let defaultThresholds = [75.0, 90.0]
 
     private func thresholdRow(window: QuotaWindow, title: String) -> some View {
-        LabeledContent(title) {
+        HStack {
+            Text(title)
+            Spacer()
             HStack(spacing: Space.xs) {
                 ForEach([50.0, 75.0, 90.0], id: \.self) { threshold in
                     Toggle(
                         String(format: "%.0f%%", threshold),
                         isOn: thresholdBinding(window: window, threshold: threshold)
                     )
+                    .accessibilityLabel("\(title): \(Int(threshold))% used")
                     .toggleStyle(.button)
                     .controlSize(.small)
                     .disabled(!model.preferences.notificationPreferences.isEnabled(.thresholdCrossed))

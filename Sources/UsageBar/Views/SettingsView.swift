@@ -20,19 +20,6 @@ enum SettingsDestination: String, CaseIterable, Identifiable {
         }
     }
 
-    var subtitle: String {
-        switch self {
-        case .display:
-            "Choose what appears in the menu bar and how Quotakin looks."
-        case .alerts:
-            "Choose when Quotakin should get your attention."
-        case .connections:
-            "Connect the providers you use and keep account quota current."
-        case .advanced:
-            "Manage refresh timing, revisit setup, and find support."
-        }
-    }
-
     var systemImage: String {
         switch self {
         case .display: "menubar.rectangle"
@@ -85,6 +72,7 @@ struct SettingsView: View {
             }
         }
         .settingsPaneFrame()
+        .toolbarBackgroundVisibility(.visible, for: .windowToolbar)
         .alert(
             model.helperConfirmation?.kind.title ?? "",
             isPresented: helperConfirmationIsPresented,

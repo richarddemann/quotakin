@@ -25,11 +25,11 @@ struct MenuBarMetricPickerPresentation {
     static func detail(for metric: MenuBarMetric, quotaDisplayMode: QuotaDisplayMode) -> String {
         switch metric {
         case .sessionPercentage:
-            "Current session quota (quotaDisplayMode.label)"
+            "5-hour quota \(quotaDisplayMode.label)"
         case .resetCountdown:
             "Time until the current quota resets"
         case .weeklyPercentage:
-            "Weekly quota (quotaDisplayMode.label)"
+            "Weekly quota \(quotaDisplayMode.label)"
         case .dailyTokens:
             "Tokens processed today"
         case .weeklyTokens:

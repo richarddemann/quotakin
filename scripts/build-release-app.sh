@@ -161,6 +161,9 @@ cat > "$app_path/Contents/Info.plist" <<PLIST
 </plist>
 PLIST
 
+# Finder metadata on copied framework bundles is rejected by codesign.
+/usr/bin/xattr -cr "$app_path"
+
 if [ "$signing_identity" = "-" ]; then
     /usr/bin/codesign --force --sign - "$app_path"
 else

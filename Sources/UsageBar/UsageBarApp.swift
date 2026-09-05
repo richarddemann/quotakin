@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct QuotakinApp: App {
+    @NSApplicationDelegateAdaptor(QuotakinAppDelegate.self) private var appDelegate
     @StateObject private var model = AppModel.live()
     private let updaterController = SPUStandardUpdaterController(
         startingUpdater: true,
@@ -61,9 +62,17 @@ struct QuotakinApp: App {
                     await model.start()
                 }
         }
+        .windowToolbarLabelStyle(fixed: .titleAndIcon)
         .defaultSize(width: SettingsLayout.windowWidth, height: 620)
         // Respect SettingsView's fixed horizontal bounds while its infinite
         // maximum height keeps vertical resizing available.
         .windowResizability(.contentSize)
+    }
+}
+
+@MainActor
+final class QuotakinAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
     }
 }

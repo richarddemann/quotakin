@@ -166,7 +166,7 @@ func provenanceIsAlwaysTruthfulAndMixedSourcesAreAttributedPerWindow() {
 }
 
 @Test
-func sharedFreshAccountProvenanceUsesOneUnattributedLine() {
+func sharedFreshAccountProvenanceNeedsNoStatusLine() {
     let now = Date(timeIntervalSince1970: 1_780_308_100)
     let presentation = presentation(
         now: now,
@@ -177,7 +177,7 @@ func sharedFreshAccountProvenanceUsesOneUnattributedLine() {
     )
 
     #expect(!presentation.sourcesMateriallyDiffer)
-    #expect(presentation.sourceDetail(for: presentation.primaryQuota!) == "Account quota · updated now")
+    #expect(presentation.sourceDetail(for: presentation.primaryQuota!) == nil)
     #expect(presentation.sourceDetail(for: presentation.secondaryQuota!) == nil)
 }
 

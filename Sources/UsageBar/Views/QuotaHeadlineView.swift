@@ -1,13 +1,7 @@
 import SwiftUI
 import UsageCore
 
-/// The shared quota-glance body: the percent headline, the window/reset
-/// caption, a caller-supplied progress slot, the pace line, and the source
-/// detail. `ProviderCardView` and `PetRowView` both render through this so a
-/// card restyle can never silently miss the pet row. The only thing that
-/// differs between the two callers is what goes in the progress slot — a plain
-/// tinted bar for the card, or the pet ground (bar + sprite ZStack) for the
-/// pet row.
+/// Quota headline and reset time with either a plain bar or pet track.
 struct QuotaHeadlineView<ProgressContent: View>: View {
     let snapshot: QuotaSnapshot
     let presentation: ProviderCardPresentation
