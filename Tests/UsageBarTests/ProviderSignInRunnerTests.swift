@@ -200,7 +200,8 @@ func foundationSignInProcessRunnerHonorsCancellation() async throws {
         try await runner.run(command)
     }
 
-    try await Task.sleep(for: .milliseconds(50))
+    // Cancel immediately: exercise the launch/cancellation race without
+    // depending on a 50 ms wake-up during a heavily loaded parallel test run.
     task.cancel()
     let result = try await task.value
 

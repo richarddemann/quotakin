@@ -71,7 +71,16 @@ public struct ProcessClaudeUsageControlTransport: ClaudeUsageControlTransport {
         let session = try ClaudeUsageControlSession(executableURL: executable)
         defer { session.terminate() }
         return try await withThrowingTaskGroup(of: Data.self) { group in
-            group.addTask { try session.usage() }
+            group.addTask {
+                // Pipe reads block. Keep them off Swift's cooperative executor
+                // so cancellation and timeout tasks remain schedulable.
+                try await withCheckedThrowingContinuation { continuation in
+                    DispatchQueue.global(qos: .utility).async {
+                        do { continuation.resume(returning: try session.usage()) }
+                        catch { continuation.resume(throwing: error) }
+                    }
+                }
+            }
             group.addTask {
                 try await Task.sleep(for: .seconds(max(timeout, 0)))
                 session.terminate(timedOut: true)
