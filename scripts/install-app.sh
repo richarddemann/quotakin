@@ -118,6 +118,10 @@ executable_path="$bin_path/$executable_name"
 resource_bundle_path="$bin_path/$resource_bundle_name"
 sparkle_framework_path="$bin_path/Sparkle.framework"
 app_icon_path="$resource_bundle_path/$source_app_icon_name"
+# Swift 6.4's bundle layout places copied resources under Contents/Resources.
+if [ ! -f "$app_icon_path" ]; then
+    app_icon_path="$resource_bundle_path/Contents/Resources/$source_app_icon_name"
+fi
 license_path="$repo_root/LICENSE"
 third_party_notices_path="$repo_root/THIRD_PARTY_NOTICES.md"
 

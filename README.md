@@ -20,7 +20,7 @@ Check for updates from the app’s More menu or Settings → Advanced. Automatic
 
 ## Usage
 
-Local history comes from Claude Code and Codex usage records on your Mac. Connect an account in **Settings → Connections** to see its account-wide quota. Stopping account checks leaves local history available.
+Local history comes from Claude Code and Codex usage records on your Mac. Connect an account in **Settings → Connections** to see its account-wide quota. Claude checks use Claude Code’s own login and token renewal, without running a model request. Stopping account checks leaves local history available.
 
 History includes token counts, activity, and estimated costs. Cost estimates are not subscription charges or provider bills.
 

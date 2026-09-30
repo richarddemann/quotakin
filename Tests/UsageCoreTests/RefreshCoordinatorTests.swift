@@ -1820,3 +1820,36 @@ func watchBurstTriggersOneDebouncedRefresh() async throws {
     #expect(watcherFactory.registrationsSnapshot().last?.directories == [sourceDirectory])
     #expect(await collector.calls() == 1)
 }
+
+private actor SuspendedAccountQuotaProvider: AccountQuotaProvider {
+    nonisolated let provider = Provider.claude
+    private var callCount = 0
+    private var continuation: CheckedContinuation<Void, Never>?
+    func quotaSnapshots() async throws -> [QuotaSnapshot] {
+        callCount += 1
+        await withCheckedContinuation { continuation = $0 }
+        return [QuotaSnapshot(provider: .claude, window: .weekly, source: .account,
+                              usedPercent: 89, resetsAt: Date().addingTimeInterval(3600), observedAt: Date())]
+    }
+    func calls() -> Int { callCount }
+    func release() { continuation?.resume(); continuation = nil }
+}
+
+@Test
+func overlappingAccountChecksShareOneCompletedProbe() async throws {
+    let provider = SuspendedAccountQuotaProvider()
+    let coordinator = RefreshCoordinator(store: try UsageStore.inMemory(), collectors: [],
+                                         accountQuotaProviders: [provider], authorizedAccountProviders: [.claude])
+    let first = Task { await coordinator.requestAccountRefresh(for: .claude) }
+    await eventually { await provider.calls() == 1 }
+    let second = Task { await coordinator.requestAccountRefresh(for: .claude) }
+    // Give the actor a chance to enter the overlapping manual refresh.
+    try await Task.sleep(for: .milliseconds(50))
+    #expect(await provider.calls() == 1)
+    await provider.release()
+    await first.value
+    await second.value
+    #expect(await provider.calls() == 1)
+    #expect(await coordinator.connectionReport(for: .claude)?.state == .connected)
+    #expect(await coordinator.latestQuota(provider: .claude).first?.usedPercent == 89)
+}

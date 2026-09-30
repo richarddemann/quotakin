@@ -527,8 +527,11 @@ public struct ClaudeOAuthUsageClient: Sendable {
 
     public func quotaSnapshots() async throws -> [QuotaSnapshot] {
         let data = try await send()
+        return try Self.snapshots(from: data, observedAt: observedAt())
+    }
+
+    static func snapshots(from data: Data, observedAt: Date) throws -> [QuotaSnapshot] {
         let decoded = try decode(ClaudeOAuthUsageResponse.self, from: data)
-        let observedAt = observedAt()
         var snapshots: [QuotaSnapshot] = []
 
         if let fiveHour = decoded.fiveHour,
@@ -582,7 +585,7 @@ public struct ClaudeOAuthUsageClient: Sendable {
         return response.data
     }
 
-    private func snapshot(
+    private static func snapshot(
         from window: ClaudeOAuthUsageWindow,
         window quotaWindow: QuotaWindow,
         observedAt: Date

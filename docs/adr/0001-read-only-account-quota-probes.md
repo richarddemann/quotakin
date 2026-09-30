@@ -17,3 +17,11 @@ Successful Claude account probes are limited to one network request per fifteen 
 ## Consequences
 
 The account probes require source-specific health/backoff tests and may need revision if provider interfaces change. A local session log or status-line snapshot is never rendered as global live quota.
+
+## 2026-09-29: Claude-owned authentication
+
+The live Claude provider now uses Claude Code's stream-json control protocol (`initialize`, then `get_usage`), matching current T3 Code's usage integration. No user message is sent. The CLI owns Keychain access and renewal of its existing login; Quotakin does not independently rotate tokens, avoiding refresh-token races and bundle-signature-dependent Keychain grants. The older direct OAuth provider remains available as library code, but is no longer used by the app.
+
+Checks run in an isolated temporary working directory, with settings sources, hooks, tools, MCP servers, and session persistence disabled. They have a 30-second deadline and discard stderr and provider error text. Simultaneous manual/background checks share one completed provider check. General session and weekly windows are decoded independently; inactive windows with no reset time are omitted rather than given an invented reset.
+
+The default Claude automatic-check minimum is five minutes. Existing account consent and refresh preferences are preserved. Connection checks no longer ask Quotakin for access to Claude's Keychain item after login.

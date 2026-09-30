@@ -8,11 +8,11 @@ Run the test suite:
 ./scripts/test.sh
 ```
 
-Build or run with Swift Package Manager:
+Build with Swift Package Manager, or rebuild and launch the installed app bundle:
 
 ```sh
 swift build
-swift run Quotakin
+./script/build_and_run.sh --verify
 ```
 
 Install a local app bundle:

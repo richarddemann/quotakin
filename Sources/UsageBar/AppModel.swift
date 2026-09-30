@@ -946,7 +946,7 @@ private enum AppBootstrap {
                 CodexCollector()
             ],
             accountQuotaProviders: [
-                ClaudeCodeOAuthQuotaProvider(),
+                ClaudeCLIQuotaProvider(),
                 CodexAccountQuotaProvider()
             ],
             accountQuotaCooldownStore: UserDefaultsAccountQuotaCooldownStore(defaults: defaults),

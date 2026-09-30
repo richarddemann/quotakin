@@ -178,6 +178,7 @@ public actor RefreshCoordinator {
     private var latestTokenObservedAtByProvider: [Provider: Date] = [:]
     private var lastLocalUsageRefreshAt: Date?
     private var accountRefreshStates: [Provider: AccountRefreshState] = [:]
+    private var accountRefreshWaiters: [Provider: [CheckedContinuation<Void, Never>]] = [:]
     private var authorizedAccountProviders: Set<Provider>
     private var fallbackTimer: (any RefreshCancellation)?
     private var accountRefreshTimer: (any RefreshCancellation)?
@@ -459,6 +460,20 @@ public actor RefreshCoordinator {
         for provider in accountQuotaProviders
             where authorizedAccountProviders.contains(provider.provider)
                 && (providerFilter == nil || provider.provider == providerFilter) {
+            // Actor methods reenter while awaiting the CLI/network. Share the
+            // entire in-flight check so refresh buttons and timers cannot start
+            // competing CLI processes or race token renewal.
+            if accountRefreshWaiters[provider.provider] != nil {
+                await withCheckedContinuation { continuation in
+                    accountRefreshWaiters[provider.provider, default: []].append(continuation)
+                }
+                continue
+            }
+            accountRefreshWaiters[provider.provider] = []
+            defer {
+                let waiters = accountRefreshWaiters.removeValue(forKey: provider.provider) ?? []
+                waiters.forEach { $0.resume() }
+            }
             if !force,
                provider.provider == .claude,
                hasFreshLocalQuota(for: .claude) {

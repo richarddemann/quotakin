@@ -224,13 +224,9 @@ struct LiveProviderCredentialAccessAuthorizer: ProviderCredentialAccessAuthorizi
         case .codex:
             return true
         case .claude:
-            let granted = await Task.detached(priority: .userInitiated) {
-                ClaudeCodeCredentialStore().authorizeKeychainAccessInteractively()
-            }.value
-            if granted {
-                return true
-            }
-            return (try? await ClaudeCodeCredentialStore().loadCredential()) != nil
+            // The usage control protocol runs inside Claude Code, which owns
+            // its Keychain ACL and renews its saved login itself.
+            return ProviderCLIExecutableLocator.locate(provider: .claude) != nil
         }
     }
 }

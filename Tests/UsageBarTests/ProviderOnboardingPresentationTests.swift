@@ -306,7 +306,7 @@ func claudeOnboardingRecommendsOnlyTheNextAccountAction() throws {
     )
 
     #expect(descriptor.primaryAction(for: nil)?.kind == .signIn(.claude))
-    #expect(descriptor.steps.contains("Approve the Keychain prompt if macOS asks."))
+    #expect(descriptor.steps.contains("Claude Code keeps your login renewed automatically."))
     #expect(descriptor.primaryAction(for: ProviderConnectionReport(
         provider: .claude,
         state: .authenticationRequired,

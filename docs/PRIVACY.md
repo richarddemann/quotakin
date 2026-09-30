@@ -7,7 +7,7 @@ Quotakin is designed to show useful capacity and usage information without retai
 Quotakin stores summary metadata such as provider, model, observation time, token counts, quota windows, and opaque hashed source identifiers. It does not store prompts, responses, transcript text, tool contents, raw source paths, credentials, or cookies.
 
 - Local history reads token metadata already present in `~/.claude/projects` and `~/.codex/sessions`.
-- Account checks begin only after you choose **Connect** or **Check**. They are read-only and never refresh or save provider credentials.
+- Account checks begin only after you choose **Connect** or **Check**. Claude quota is requested through the installed Claude Code CLI using its `get_usage` control request. Claude Code owns and may renew its existing login; Quotakin never reads, receives, or saves that credential. No prompt or model request is sent. The quota process disables hooks, tools, MCP servers, and session persistence. Codex quota uses its installed CLI app-server.
 - The optional Claude status-line helper stores only quota percentages, reset times, and an observation timestamp. Installation and removal are user-initiated.
 - To estimate token costs, Quotakin downloads the public LiteLLM model-pricing catalog at launch and refreshes its local cache after 24 hours. Failed refreshes are limited to one attempt per hour while the app remains open. This unauthenticated request contains no transcript, usage record, account credential, or provider cookie. If it fails, Quotakin uses the last cached catalog or its reviewed bundled fallback.
 

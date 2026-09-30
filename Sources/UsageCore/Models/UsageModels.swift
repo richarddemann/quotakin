@@ -136,6 +136,7 @@ public enum ProviderConnectionState: String, Codable, Equatable, Sendable {
 public enum ProviderConnectionSource: String, Codable, Equatable, Sendable {
     case accountProbe
     case claudeOAuth
+    case claudeCLI
     case codexAppServer
 }
 

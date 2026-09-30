@@ -105,7 +105,7 @@ struct ProviderOnboardingDescriptor: Identifiable, Sendable {
                 steps: [
                     "Quotakin opens Claude's secure sign-in in your browser.",
                     "Complete sign-in with your Anthropic account.",
-                    "Approve the Keychain prompt if macOS asks.",
+                    "Claude Code keeps your login renewed automatically.",
                     "Quotakin verifies live quota automatically."
                 ],
                 recommendedAction: { report in
@@ -264,6 +264,8 @@ struct ProviderOnboardingPresentation {
             return "Checks off"
         }
         switch connectionReport?.source {
+        case .claudeCLI:
+            return "Claude Code CLI"
         case .claudeOAuth:
             return "Claude OAuth"
         case .codexAppServer:
